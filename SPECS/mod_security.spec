@@ -10,7 +10,7 @@
 Summary: Security module for the Apache HTTP Server
 Name: mod_security 
 Version: 2.7.3
-Release: 2%{?dist}
+Release: 5%{?dist}
 License: ASL 2.0
 URL: http://www.modsecurity.org/
 Group: System Environment/Daemons
@@ -18,6 +18,8 @@ Source: http://www.modsecurity.org/tarball/%{version}/modsecurity-apache_%{versi
 Source1: mod_security.conf
 Source2: 10-mod_security.conf
 Patch0: mod_security-2.7.3-fix-mem-leak-and-cve-2013-2765.patch
+Patch1: modsecurity-2.7.3-CVE-2013-5705.patch
+
 Requires: httpd httpd-mmn = %{_httpd_mmn}
 BuildRequires: httpd-devel libxml2-devel pcre-devel curl-devel lua-devel
 
@@ -39,6 +41,7 @@ This package contains the ModSecurity Audit Log Collector.
 %prep
 %setup -q -n modsecurity-apache_%{version}
 %patch0 -p1
+%patch1 -p1
 
 %build
 %configure --enable-pcre-match-limit=1000000 \
@@ -109,6 +112,16 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Apr  3 2014 Daniel Kopecek <dkopecek@redhat.com> - 2.7.3-5
+- Fix Chunked string case sensitive issue (CVE-2013-5705)
+  Resolves: rhbz#1082907
+
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 2.7.3-4
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 2.7.3-3
+- Mass rebuild 2013-12-27
+
 * Tue May 28 2013 Athmane Madjoudj <athmane@fedoraproject.org> 2.7.3-2
 - Fix NULL pointer dereference (DoS, crash) (CVE-2013-2765) (RHBZ #967615)
 - Fix a possible memory leak.
